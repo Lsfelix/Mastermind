@@ -7,7 +7,7 @@
 #include <algorithm>    // std::shuffle
 #include <random>       // std::default_random_engine
 #include <chrono>       // std::chrono::system_clock
-using namespace std;
+        using namespace std;
 
 enum
 {
@@ -29,28 +29,43 @@ int main()
 
     srand (time(NULL));
 
-    set <int> solution;
+    int solution [4];
 
-    firstPeg = rand() % 8;
-    secondPeg = rand() % 8;
-    thirdPeg = rand() % 8;
-    fourthPeg = rand() % 8;
+    firstPeg = rand() % 6;
+    secondPeg = rand() % 6;
+    thirdPeg = rand() % 6;
+    fourthPeg = rand() % 6;
 
-    solution.insert(firstPeg);
-    solution.insert(secondPeg);
-    solution.insert(thirdPeg);
-    solution.insert(fourthPeg);
+   // firstPeg = 1;
+    //secondPeg = 1;
+    //thirdPeg = 3;
+    //fourthPeg = 2;
+
+    solution[0] = firstPeg;
+    solution[1] = secondPeg;
+    solution[2] = thirdPeg;
+    solution[3] = fourthPeg;
+
+    system("CLS");
 
     cout << "---MASTERMIND---" << endl << "0 = Vermelho" << endl << "1 = Verde" << endl << "2 = Azul"
     << endl << "3 = Laranja" << endl << "4 = Roxo" << endl << "5 = Amarelo" << endl << "---------------------";
 
-    cout << firstPeg << secondPeg << thirdPeg << fourthPeg;
+    cout << firstPeg << secondPeg << thirdPeg << fourthPeg << endl;
 
-    cout << "Senha definida! Faça sua primeira jogada!";
+    cout << endl <<  "Senha definida! Faca sua primeira jogada!" << endl;
 
     while(tentativas < 8)
     {
+        
         cin >> firstGuess >> secondGuess >> thirdGuess >> fourthGuess;
+        
+        int guesses[4];
+
+        guesses[0] = firstGuess;
+        guesses[1] = secondGuess;
+        guesses[2] = thirdGuess;
+        guesses[3] = fourthGuess;
 
         array<int,4> feedbackIndex {0,1,2,3};
 
@@ -60,56 +75,31 @@ int main()
 
         string feedback[4];
 
-        if(firstPeg == firstGuess)
-        {        
-            feedback[feedbackIndex[0]] = "PRETO";
-        }
-        else if(solution.count(firstGuess) == 1)
+        int whiteMarker[4] {0,0,0,0};
+        
+        for (int i = 0; i < 4; i++)
         {
-            feedback[feedbackIndex[0]] = "BRANCO";
-        }
-        else
-        {
-            feedback[feedbackIndex[0]] = "NADA";
+            if (solution[i] == guesses[i])
+            {
+                feedback[feedbackIndex[i]] = "PRETO";
+                guesses[i] = -1;
+                whiteMarker[i] = 1;
+                //break;
+            }
         }
 
-        if(secondPeg == secondGuess)
-        {        
-            feedback[feedbackIndex[1]] = "PRETO";
-        }
-        else if(solution.count(secondGuess) == 1)
+        for (int i = 0; i < 4; i++)
         {
-            feedback[feedbackIndex[1]] = "BRANCO";
-        }
-        else
-        {
-            feedback[feedbackIndex[1]] = "NADA";
-        }
-
-        if(thirdPeg == thirdGuess)
-        {        
-            feedback[feedbackIndex[2]] = "PRETO";
-        }
-        else if(solution.count(thirdGuess) == 1)
-        {
-            feedback[feedbackIndex[2]] = "BRANCO";
-        }
-        else
-        {
-            feedback[feedbackIndex[2]] = "NADA";
-        }
-
-        if(fourthPeg == fourthGuess)
-        {        
-            feedback[feedbackIndex[3]] = "PRETO";
-        }
-        else if(solution.count(fourthGuess) == 1)
-        {
-            feedback[feedbackIndex[3]] = "BRANCO";
-        }
-        else
-        {
-            feedback[feedbackIndex[3]] = "NADA";
+            for (int j = 0; j < 4; j++)
+            {
+                if (guesses[i] == solution[j] && whiteMarker[j] == 0 && i != j)
+                {
+                    feedback[feedbackIndex[i]] = "BRANCO";
+                    whiteMarker[j] = 1;
+                   // break;
+                }
+            }
+            
         }
 
         win = true;
@@ -124,14 +114,15 @@ int main()
 
         if(win)
         {
-            cout << "Parabéns! Você acertou a sequência!" << endl;
+            cout << "Parabens! Voce acertou a sequencia!" << endl;
             break;
-        }else{
-            cout << feedback;
-            tentativas++;
         }
-
+        
+        for (int i = 0; i < 4; i++)
+        {
+            cout << feedback[i] << " ";
+        }
+        cout << endl;
+        tentativas++;
     }
-
-
 }
